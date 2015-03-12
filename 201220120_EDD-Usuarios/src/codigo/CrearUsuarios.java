@@ -45,6 +45,7 @@ public class CrearUsuarios extends javax.swing.JFrame {
             }
         });
         setLocationRelativeTo(null);
+        setTitle("Menu - Crear Usuario");
     }
 
     public void datosVentana() {

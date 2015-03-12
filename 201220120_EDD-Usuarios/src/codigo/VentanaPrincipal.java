@@ -15,18 +15,18 @@ import javax.swing.WindowConstants;
  */
 public class VentanaPrincipal extends javax.swing.JFrame {
 
-  
     /**
      * Creates new form VentanaPrincipal
      */
     public VentanaPrincipal() {
-        
+
         initComponents();
         setIconImage(new ImageIcon(getClass().getResource("/imagenes/icon.png")).getImage());
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
         setLocationRelativeTo(null);
-      
+        setTitle("Menu Principal");
+
     }
 
     /**
@@ -60,14 +60,29 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         btnAsignarVuelos.setFont(new java.awt.Font("Elected Office", 0, 18)); // NOI18N
         btnAsignarVuelos.setText("Asignación de Vuelos");
         btnAsignarVuelos.setPreferredSize(new java.awt.Dimension(204, 29));
+        btnAsignarVuelos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAsignarVuelosActionPerformed(evt);
+            }
+        });
 
         btnEstadoVuelos.setFont(new java.awt.Font("Elected Office", 0, 18)); // NOI18N
         btnEstadoVuelos.setText("Observación de Vuelos");
         btnEstadoVuelos.setPreferredSize(new java.awt.Dimension(204, 29));
+        btnEstadoVuelos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEstadoVuelosActionPerformed(evt);
+            }
+        });
 
         btnCrearUsuarios2.setFont(new java.awt.Font("Elected Office", 0, 18)); // NOI18N
         btnCrearUsuarios2.setLabel("Dar de Baja");
         btnCrearUsuarios2.setPreferredSize(new java.awt.Dimension(204, 29));
+        btnCrearUsuarios2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCrearUsuarios2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlUnoLayout = new javax.swing.GroupLayout(pnlUno);
         pnlUno.setLayout(pnlUnoLayout);
@@ -126,9 +141,29 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         CrearUsuarios menu = new CrearUsuarios();
         menu.setVisible(true);
         this.setVisible(false);
-        
+
         // TODO add your handling code here:
     }//GEN-LAST:event_btnCrearUsuariosActionPerformed
+
+    private void btnAsignarVuelosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignarVuelosActionPerformed
+
+        Vuelos menu = new Vuelos();
+        menu.setVisible(true);
+        this.setVisible(false);// TODO add your handling code here:
+    }//GEN-LAST:event_btnAsignarVuelosActionPerformed
+
+    private void btnEstadoVuelosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstadoVuelosActionPerformed
+        MenuAeropuerto menu = new MenuAeropuerto();
+        dispose();
+        menu.setVisible(true);        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEstadoVuelosActionPerformed
+
+    private void btnCrearUsuarios2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearUsuarios2ActionPerformed
+        DarDeBaja menu = new DarDeBaja();
+        dispose();
+        menu.setVisible(true);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCrearUsuarios2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

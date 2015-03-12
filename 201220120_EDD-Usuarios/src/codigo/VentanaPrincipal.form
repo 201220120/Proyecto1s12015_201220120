@@ -116,6 +116,9 @@
               <Dimension value="[204, 29]"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAsignarVuelosActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnEstadoVuelos">
           <Properties>
@@ -130,6 +133,9 @@
           <AccessibilityProperties>
             <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=""/>
           </AccessibilityProperties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEstadoVuelosActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnCrearUsuarios2">
           <Properties>
@@ -141,6 +147,9 @@
               <Dimension value="[204, 29]"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCrearUsuarios2ActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
