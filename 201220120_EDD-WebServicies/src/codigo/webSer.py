@@ -342,7 +342,7 @@ class arbolUsuarios():
             nodoRaiz.preorden(r.izquierda)
             nodoRaiz.preorden(r.derecha)
 
-
+    
 
     def ToDot(nodoRaiz, node):
         cont = ""
@@ -353,7 +353,9 @@ class arbolUsuarios():
             cont = cont + node.toString() + "--" + node.derecha.toString() + "\n"
             cont = cont + nodoRaiz.ToDot(node.derecha)
         return cont
+    
 
+        
     def ToDotGraph(nodoRaiz):
         contenido = ""
         if nodoRaiz.raiz == None:
@@ -361,13 +363,13 @@ class arbolUsuarios():
             nodoRaiz.Grafica = contenido 
         else:
             if nodoRaiz.raiz.izquierda == None and nodoRaiz.raiz.derecha == None:
-                contenido = nodoRaiz.raiz.user 
+                aux2 = "%s" % nodoRaiz.raiz.user
+                contenido = contenido + aux2 
                 nodoRaiz.Grafica = contenido 
             else:
                 contenido = nodoRaiz.ToDot(nodoRaiz.raiz)
                 nodoRaiz.Grafica = contenido 
-
-
+  
 
     def usuarioExiste(nodoRaiz, username):
         iterador = nodoRaiz.raiz

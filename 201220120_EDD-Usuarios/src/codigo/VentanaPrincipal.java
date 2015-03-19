@@ -67,7 +67,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         });
 
         btnEstadoVuelos.setFont(new java.awt.Font("Elected Office", 0, 18)); // NOI18N
-        btnEstadoVuelos.setText("Observación de Datos");
+        btnEstadoVuelos.setText("Observación de Vuelos");
         btnEstadoVuelos.setPreferredSize(new java.awt.Dimension(204, 29));
         btnEstadoVuelos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

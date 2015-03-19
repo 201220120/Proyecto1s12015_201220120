@@ -360,31 +360,31 @@ String cadenaPDF = "";
                             panelGrapviz.setCaretPosition(panelGrapviz.getStyledDocument().getLength());
 
                             FileWriter fichero;
-                        //PrintWriter pw;
-                        fichero = new FileWriter("D:\\nodoUsuarios.txt");
-                        patch = "D:\\nodoUsuarios.txt";
-                        nom = "nodoUsuarios";
+                            //PrintWriter pw;
+                            fichero = new FileWriter("D:\\nodoUsuarios.txt");
+                            patch = "D:\\nodoUsuarios.txt";
+                            nom = "nodoUsuarios";
 
-                        String url3 = "http://127.0.0.1:5000/dibujar_arbolUsuarios";
-                        String res3 = crearConexion.crearConexion(url3, "HTTP");
+                            String url3 = "http://127.0.0.1:5000/dibujar_arbolUsuarios";
+                            String res3 = crearConexion.crearConexion(url3, "HTTP");
 
-                        System.out.println(res3);
+                            System.out.println(res3);
 
-                        fichero.write("graph G {" + "\n"
-                                + " node [fontsize=10,width=\".2\", height=\".2\", margin=0];"
-                                + "node [shape=rectangle];");
+                            fichero.write("graph G {" + "\n"
+                                    + " node [fontsize=10,width=\".2\", height=\".2\", margin=0];"
+                                    + "node [shape=rectangle];");
 
-                        fichero.write(res3);
-                        fichero.write("}");
+                            fichero.write(res3);
+                            fichero.write("}");
 
-                        fichero.close();
+                            fichero.close();
 
-                        crearImagen(patch, nom);
-                        control = true;
-                        JOptionPane.showMessageDialog(null, "Grafica creada exitosamente");
+                            crearImagen(patch, nom);
+                            control = true;
+                            JOptionPane.showMessageDialog(null, "Grafica creada exitosamente");
 
-                        ImageIcon icono = new ImageIcon("D:/" + nom + ".jpg");
-                        panelGrapviz.insertIcon(icono);
+                            ImageIcon icono = new ImageIcon("D:/" + nom + ".jpg");
+                            panelGrapviz.insertIcon(icono);
                         }
 
                     }

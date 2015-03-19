@@ -771,6 +771,9 @@ fechallegada.addSelectionChangedListener(new datechooser.events.SelectionChanged
                     String res = crearConexion.crearConexion(url, "HTTP");
                     comboId.removeItemAt(index);
                     reiniciar();
+                     showMessageDialog(null, "Vuelo eliminado exitosamente");
+                    menu.setVisible(true);
+                    dispose();
                 } else {
 
                 }
