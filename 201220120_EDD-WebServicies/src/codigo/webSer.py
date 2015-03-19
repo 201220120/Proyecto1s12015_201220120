@@ -447,8 +447,6 @@ class arbolUsuarios():
                     padre.derecha = None
         else:
             if auxiliar.derecha == None:
-                #nodo1 = auxiliar.derecha
-                #nodoRaiz.insertarAVL(auxiliar.derecha,nodoRaiz.raiz)
                 if auxiliar == nodoRaiz.raiz:
                     nodoRaiz.raiz = auxiliar.izquierda
                 else:
@@ -458,8 +456,6 @@ class arbolUsuarios():
                         padre.derecha = auxiliar.izquierda
             else:
                 if auxiliar.izquierda == None:
-                    #nodo1 = auxiliar.izquierda
-                    #nodoRaiz.insertarAVL(auxiliar.izquierda,nodoRaiz.raiz)
                     if auxiliar == nodoRaiz.raiz:
                         nodoRaiz.raiz = auxiliar.derecha
                     else:
@@ -477,16 +473,7 @@ class arbolUsuarios():
                         else:
                             padre.derecha = reemplazo
                     reemplazo.izquierda = auxiliar.izquierda
-                    #nodo1 = reemplazo
-                    #nodoRaiz.insertarAVL(reemplazo,nodoRaiz.raiz)
         return True
-
-
-        
-
-
-
-
 #---------------------------------------------------------LISTA USUARIOS ASIGNADOS-------------------------------------------------------
 class nodoUsuariosAsignados():
     def __init__(nodoRaiz, nombreUsuario):
@@ -573,12 +560,9 @@ class ListaUsuariosAsignados():
         iterador = nodoRaiz.cabeza
         aux3 = "%s" % nodoRaiz.get_nodos()
         contenido = " subgraph cluster_0 { node [style=filled] " + aux3  + " color=blue}"
-        #"node [shape=record fontsize=8 fontname=\"Verdana\"]; \n" + 
         tmp = ""
-        #contenido = ""
         while iterador != None:
             if iterador.siguiente != None:
-                #print " ENTRO"
                 contenido = "\n" + contenido + "{rank=same " + iterador.nombreUsuario + "  " + iterador.siguiente.nombreUsuario + "}"
                 tmp = "%s" % iterador.nombreUsuario         
                 contenido = contenido + "\"" + iterador.nombreUsuario + "\"" + "--" + iterador.siguiente.nombreUsuario + "\n"       
@@ -601,7 +585,7 @@ class ListaUsuariosAsignados():
 #-------------------------------------------------------------ARBOL VUELOS-----------------------------------------------------------------
 class nodoVuelos():
     def __init__(nodoRaiz, lugarLlegada, aeropuerto, horaFechaSalida, horaFechaLlegada, cantidadPrimeraClase, costoPrimeraClase, cantidadClaseTurista, costoClaseTurista, cantidadClaseEjecutiva, costoClaseEjecutiva, idd):
-        nodoRaiz.lugarLlegada = lugarLlegada #El lugar de salida se sabe que es del mismo aeropuerto y el aeropuerto debe existir sino este no puede ser asignado
+        nodoRaiz.lugarLlegada = lugarLlegada 
         nodoRaiz.aeropuerto = aeropuerto
         nodoRaiz.horaFechaSalida = horaFechaSalida
         nodoRaiz.horaFechaLlegada = horaFechaLlegada
@@ -611,8 +595,8 @@ class nodoVuelos():
         nodoRaiz.costoClaseTurista = costoClaseTurista
         nodoRaiz.cantidadClaseEjecutiva = cantidadClaseEjecutiva
         nodoRaiz.costoClaseEjecutiva = costoClaseEjecutiva
-        nodoRaiz.EstadoInicial = "En-Aeropuerto"     #el cual por defecto serÃ¡ â€œEn aeropuertoâ€?
-        nodoRaiz.idd = idd     # Ãºnico y es generado por el sistema
+        nodoRaiz.EstadoInicial = "En-Aeropuerto"     
+        nodoRaiz.idd = idd     
         nodoRaiz.izquierda = None
         nodoRaiz.derecha = None
         nodoRaiz.usuariosAsignados = None
@@ -816,8 +800,7 @@ class arbolVuelos():
         return nuevoPadre
 
     def insertar(nodoRaiz, lugarLlegada, aeropuerto, horaFechaSalida, horaFechaLlegada, cantidadPrimeraClase, costoPrimeraClase, cantidadClaseTurista, costoClaseTurista, cantidadClaseEjecutiva, costoClaseEjecutiva):
-        #a = nodoRaiz.generarId()
-        #print "entro a insertar!"
+       
         a = (nodoRaiz.contador + 1)
         n = nodoVuelos(lugarLlegada, aeropuerto, horaFechaSalida, horaFechaLlegada, cantidadPrimeraClase, costoPrimeraClase, cantidadClaseTurista, costoClaseTurista, cantidadClaseEjecutiva, costoClaseEjecutiva, a)
         if nodoRaiz.raiz == None:
@@ -840,7 +823,6 @@ class arbolVuelos():
             nodo.cantidadClaseEjecutiva = cantidadClaseEjecutiva
             nodo.costoClaseEjecutiva = costoClaseEjecutiva
             nodo.EstadoInicial = estado
-            #nodo.EstadoInicial = EstadoInicial
         else: 
             print "El vuelo no exite"
 
@@ -1150,7 +1132,6 @@ class arbolVuelos():
         else:
             if nodoRaiz.raiz.izquierda == None and nodoRaiz.raiz.derecha == None:
                 aux2 = "%s" % nodoRaiz.raiz.idd
-                #aux2 = aux2 + nodoRaiz.raiz.usuariosAsignados.cabeza.nombreUsuario + " " + nodoRaiz.raiz.usuariosAsignados.dibujar()
                 contenido = contenido + aux2 
                 nodoRaiz.Grafica = contenido  
             else:
@@ -1169,9 +1150,7 @@ class arbolVuelos():
                 aux.insertar(nombre)
                 tempo.usuariosAsignados = aux
             else:
-                #print "la lista ya no es none"
                 tempo.usuariosAsignados.insertar(nombre)
-    #   print "***************************************************"
 
 
     def getDatosVuelo(nodoRaiz, idd1):
@@ -1263,8 +1242,6 @@ class arbolVuelos():
                     padre.derecha = None
         else:
             if auxiliar.derecha == None:
-                #nodo1 = auxiliar.derecha
-                #nodoRaiz.insertarAVL(auxiliar.derecha,nodoRaiz.raiz)
                 if auxiliar == nodoRaiz.raiz:
                     nodoRaiz.raiz = auxiliar.izquierda
                 else:
@@ -1274,8 +1251,6 @@ class arbolVuelos():
                         padre.derecha = auxiliar.izquierda
             else:
                 if auxiliar.izquierda == None:
-                    #nodo1 = auxiliar.izquierda
-                    #nodoRaiz.insertarAVL(auxiliar.izquierda,nodoRaiz.raiz)
                     if auxiliar == nodoRaiz.raiz:
                         nodoRaiz.raiz = auxiliar.derecha
                     else:
@@ -1293,8 +1268,6 @@ class arbolVuelos():
                         else:
                             padre.derecha = reemplazo
                     reemplazo.izquierda = auxiliar.izquierda
-                    #nodo1 = reemplazo
-                    #nodoRaiz.insertarAVL(reemplazo,nodoRaiz.raiz)
         return True
 #---------------------------------------------------------FIN DE LAS ESTRUCTURAS----------------------------------------------------------
 obj_listaAeropuerto = listaAeropuerto()
