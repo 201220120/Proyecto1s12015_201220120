@@ -8,7 +8,10 @@ package codigo;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.ImageIcon;
+import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.WindowConstants;
 
 /**
@@ -78,7 +81,7 @@ public class CrearUsuarios extends javax.swing.JFrame {
         btnCancelar = new javax.swing.JButton();
         lblNick1 = new javax.swing.JLabel();
         lblDirec1 = new javax.swing.JLabel();
-        txtPass = new javax.swing.JTextField();
+        txtPass = new javax.swing.JPasswordField();
         txtNombre = new javax.swing.JTextField();
         lblError = new javax.swing.JLabel();
 
@@ -269,6 +272,36 @@ public class CrearUsuarios extends javax.swing.JFrame {
         if (validarCampos() == false) {
             lblError.setText("Por favor llene todos los campos para continuar.");
             lblError.setVisible(true);
+        } else {
+            String cadena = txtNick.getText();
+            Pattern pat = Pattern.compile("([a-z]|[A-z])([a-z]|[A-z]|\\d)*");
+            Matcher mat = pat.matcher(cadena);
+            if (mat.matches()) {
+                String url = "http://127.0.0.1:5000/userExiste/" + cadena;
+                String res = crearConexion.crearConexion(url, "HTTP");
+                //System.out.println("res ="+res);
+                if (res.equals("False")) {
+                    String nombre, password, user, direccion, telefono, tarjeta, direccionActual;
+                    nombre = txtNombre.getText();
+                    password = txtPass.getText();
+                    user = txtNick.getText();
+                    direccion = txtDireccion.getText();
+                    telefono = txtTelefono.getText();
+                    tarjeta = txtTarjetaC.getText();
+                    direccionActual = txtDireccionA.getText();
+                    String url1 = "http://127.0.0.1:5000/crearUsuario/"
+                            + nombre + "/" + password + "/" + user + "/" + direccion + "/"
+                            + telefono + "/" + tarjeta + "/" + direccionActual;
+
+                    String res1 = crearConexion.crearConexion(url1, "HTTP");
+                    showMessageDialog(null, "Usuario creado exitosamente");
+                    menu.setVisible(true);
+                    dispose();
+                } else {
+                    lblError.setText("El nombre de usuario ingresado ya existe, por favor elija otro");
+
+                }
+            }
         }
         // TODO add your handling code here:
     }//GEN-LAST:event_btnGuardarActionPerformed
@@ -325,13 +358,13 @@ public class CrearUsuarios extends javax.swing.JFrame {
     }//GEN-LAST:event_txtTarjetaCKeyTyped
 
     public boolean validarCampos() {
-        if (txtDireccion.getText().equals("") && txtDireccionA.getText().equals("") && txtNick.getText().equals("") && txtNombre.getText().equals("")
-                && txtPass.getText().equals("") && txtTarjetaC.getText().equals("") && txtTelefono.getText().equals("")) {
+        if (txtDireccion.getText().equals("") || txtDireccionA.getText().equals("") || txtNick.getText().equals("") || txtNombre.getText().equals("")
+                || txtPass.getText().equals("") || txtTarjetaC.getText().equals("") || txtTelefono.getText().equals("")) {
             System.out.println("falso");
             return false;
 
         } else {
-            System.out.println("cierto");
+            //System.out.println("cierto");
             return true;
         }
     }

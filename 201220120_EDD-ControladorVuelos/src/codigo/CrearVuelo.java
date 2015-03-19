@@ -9,7 +9,9 @@ import datechooser.beans.DateChooserDialog;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.StringTokenizer;
 import javax.swing.ImageIcon;
+import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.WindowConstants;
 
 /**
@@ -46,11 +48,27 @@ public class CrearVuelo extends javax.swing.JFrame {
             }
         });
         setLocationRelativeTo(null);
-        setTitle("Menu - Crear Usuario");
+        setTitle("Menu - Crear Vuelo");
     }
 
     public void datosVentana() {
         lblError.setVisible(false);
+        String url = "http://127.0.0.1:5000/get_aeropuertos/";
+        String res = crearConexion.crearConexion(url, "HTTP");
+
+        StringTokenizer tokens = new StringTokenizer(res, ",");
+        while (tokens.hasMoreTokens()) {
+            String a = tokens.nextToken();
+            this.comboSalida.addItem(a);
+            this.comboLugarLlegada.addItem(a);
+            System.out.println("" + a);
+        }
+        String url2 = "http://127.0.0.1:5000/getaeropuerotos2/";
+        String res2 = crearConexion.crearConexion(url2, "HTTP");
+        int i = Integer.parseInt(res2) + 1;
+        lblID.setText(String.valueOf(i));
+        fechallegada.setText("");
+        fechasalida.setText("");
 
     }
 
@@ -69,11 +87,12 @@ public class CrearVuelo extends javax.swing.JFrame {
         btnCancelar = new javax.swing.JButton();
         lblNick1 = new javax.swing.JLabel();
         lblDirec1 = new javax.swing.JLabel();
-        combAeropuerto = new javax.swing.JComboBox();
+        comboSalida = new javax.swing.JComboBox();
         comboLugarLlegada = new javax.swing.JComboBox();
         lblDirec2 = new javax.swing.JLabel();
         lblDirec3 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
+        fechasalida = new datechooser.beans.DateChooserCombo();
         lblError = new javax.swing.JLabel();
         pnlPrimera1 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -85,13 +104,12 @@ public class CrearVuelo extends javax.swing.JFrame {
         txtNoAsientos3 = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         txtCostoA3 = new javax.swing.JTextField();
-        dateChooserCombo1 = new datechooser.beans.DateChooserCombo();
         pnlTercera1 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         txtNoAsientos2 = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         txtCostoA2 = new javax.swing.JTextField();
-        dateChooserCombo2 = new datechooser.beans.DateChooserCombo();
+        fechallegada = new datechooser.beans.DateChooserCombo();
         lblDirec4 = new javax.swing.JLabel();
         lblID = new javax.swing.JLabel();
         lblDirec5 = new javax.swing.JLabel();
@@ -121,12 +139,12 @@ public class CrearVuelo extends javax.swing.JFrame {
         });
 
         lblNick1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lblNick1.setText("Nombre del Aeropuerto");
+        lblNick1.setText("Lugar de Salida:");
 
         lblDirec1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblDirec1.setText("Lugar de Llegada:");
 
-        combAeropuerto.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "(Seleccione un Aeropuerto)" }));
+        comboSalida.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "(Seleccione un Aeropuerto)" }));
 
         comboLugarLlegada.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "(Seleccione un Aeropuerto)" }));
 
@@ -136,284 +154,368 @@ public class CrearVuelo extends javax.swing.JFrame {
         lblDirec3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblDirec3.setText("Hora y Fecha de Llegada:");
 
-        lblError.setForeground(new java.awt.Color(255, 0, 0));
-        lblError.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblError.setText("Por favor llene todos los campos para continuar.");
-        lblError.setPreferredSize(new java.awt.Dimension(25, 25));
+        fechasalida.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
+            new datechooser.view.appearance.ViewAppearance("custom",
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 0),
+                    new java.awt.Color(0, 0, 255),
+                    false,
+                    true,
+                    new datechooser.view.appearance.swing.ButtonPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 0),
+                    new java.awt.Color(0, 0, 255),
+                    true,
+                    true,
+                    new datechooser.view.appearance.swing.ButtonPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 255),
+                    new java.awt.Color(0, 0, 255),
+                    false,
+                    true,
+                    new datechooser.view.appearance.swing.ButtonPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(128, 128, 128),
+                    new java.awt.Color(0, 0, 255),
+                    false,
+                    true,
+                    new datechooser.view.appearance.swing.LabelPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 0),
+                    new java.awt.Color(0, 0, 255),
+                    false,
+                    true,
+                    new datechooser.view.appearance.swing.LabelPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 0),
+                    new java.awt.Color(255, 0, 0),
+                    false,
+                    false,
+                    new datechooser.view.appearance.swing.ButtonPainter()),
+                (datechooser.view.BackRenderer)null,
+                false,
+                true)));
+    fechasalida.setFormat(1);
+    fechasalida.addSelectionChangedListener(new datechooser.events.SelectionChangedListener() {
+        public void onSelectionChange(datechooser.events.SelectionChangedEvent evt) {
+            fechasalidaOnSelectionChange(evt);
+        }
+    });
 
-        pnlPrimera1.setBorder(javax.swing.BorderFactory.createTitledBorder("Vuelos Primera Clase"));
-        pnlPrimera1.setRequestFocusEnabled(false);
+    lblError.setForeground(new java.awt.Color(255, 0, 0));
+    lblError.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    lblError.setText("Por favor llene todos los campos para continuar.");
+    lblError.setPreferredSize(new java.awt.Dimension(25, 25));
 
-        jLabel4.setFont(new java.awt.Font("Berlin Sans FB", 0, 14)); // NOI18N
-        jLabel4.setText("No. de Asientos:");
+    pnlPrimera1.setBorder(javax.swing.BorderFactory.createTitledBorder("Vuelos Primera Clase"));
+    pnlPrimera1.setRequestFocusEnabled(false);
 
-        txtNoAsientos1.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNoAsientos1KeyTyped(evt);
-            }
-        });
+    jLabel4.setFont(new java.awt.Font("Berlin Sans FB", 0, 14)); // NOI18N
+    jLabel4.setText("No. de Asientos:");
 
-        jLabel5.setFont(new java.awt.Font("Berlin Sans FB", 0, 14)); // NOI18N
-        jLabel5.setText("Costo por Asiento:");
+    txtNoAsientos1.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            txtNoAsientos1KeyTyped(evt);
+        }
+    });
 
-        txtCostoA1.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtCostoA1KeyTyped(evt);
-            }
-        });
+    jLabel5.setFont(new java.awt.Font("Berlin Sans FB", 0, 14)); // NOI18N
+    jLabel5.setText("Costo por Asiento:");
 
-        javax.swing.GroupLayout pnlPrimera1Layout = new javax.swing.GroupLayout(pnlPrimera1);
-        pnlPrimera1.setLayout(pnlPrimera1Layout);
-        pnlPrimera1Layout.setHorizontalGroup(
-            pnlPrimera1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlPrimera1Layout.createSequentialGroup()
-                .addGap(40, 40, 40)
+    txtCostoA1.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            txtCostoA1KeyTyped(evt);
+        }
+    });
+
+    javax.swing.GroupLayout pnlPrimera1Layout = new javax.swing.GroupLayout(pnlPrimera1);
+    pnlPrimera1.setLayout(pnlPrimera1Layout);
+    pnlPrimera1Layout.setHorizontalGroup(
+        pnlPrimera1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(pnlPrimera1Layout.createSequentialGroup()
+            .addGap(40, 40, 40)
+            .addComponent(jLabel4)
+            .addGap(30, 30, 30)
+            .addComponent(txtNoAsientos1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+            .addComponent(jLabel5)
+            .addGap(30, 30, 30)
+            .addComponent(txtCostoA1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(30, 30, 30))
+    );
+    pnlPrimera1Layout.setVerticalGroup(
+        pnlPrimera1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(pnlPrimera1Layout.createSequentialGroup()
+            .addContainerGap()
+            .addGroup(pnlPrimera1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jLabel4)
-                .addGap(30, 30, 30)
                 .addComponent(txtNoAsientos1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
                 .addComponent(jLabel5)
-                .addGap(30, 30, 30)
-                .addComponent(txtCostoA1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30))
-        );
-        pnlPrimera1Layout.setVerticalGroup(
-            pnlPrimera1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlPrimera1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlPrimera1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(txtNoAsientos1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5)
-                    .addComponent(txtCostoA1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(19, Short.MAX_VALUE))
-        );
+                .addComponent(txtCostoA1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addContainerGap(19, Short.MAX_VALUE))
+    );
 
-        pnlTercera.setBorder(javax.swing.BorderFactory.createTitledBorder("Vuelos Clase Ejecutiva"));
+    pnlTercera.setBorder(javax.swing.BorderFactory.createTitledBorder("Vuelos Clase Ejecutiva"));
 
-        jLabel8.setFont(new java.awt.Font("Berlin Sans FB", 0, 14)); // NOI18N
-        jLabel8.setText("No. de Asientos:");
+    jLabel8.setFont(new java.awt.Font("Berlin Sans FB", 0, 14)); // NOI18N
+    jLabel8.setText("No. de Asientos:");
 
-        txtNoAsientos3.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNoAsientos3KeyTyped(evt);
-            }
-        });
+    txtNoAsientos3.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            txtNoAsientos3KeyTyped(evt);
+        }
+    });
 
-        jLabel9.setFont(new java.awt.Font("Berlin Sans FB", 0, 14)); // NOI18N
-        jLabel9.setText("Costo por Asiento:");
+    jLabel9.setFont(new java.awt.Font("Berlin Sans FB", 0, 14)); // NOI18N
+    jLabel9.setText("Costo por Asiento:");
 
-        txtCostoA3.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtCostoA3KeyTyped(evt);
-            }
-        });
+    txtCostoA3.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            txtCostoA3KeyTyped(evt);
+        }
+    });
 
-        javax.swing.GroupLayout pnlTerceraLayout = new javax.swing.GroupLayout(pnlTercera);
-        pnlTercera.setLayout(pnlTerceraLayout);
-        pnlTerceraLayout.setHorizontalGroup(
-            pnlTerceraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlTerceraLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
+    javax.swing.GroupLayout pnlTerceraLayout = new javax.swing.GroupLayout(pnlTercera);
+    pnlTercera.setLayout(pnlTerceraLayout);
+    pnlTerceraLayout.setHorizontalGroup(
+        pnlTerceraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(pnlTerceraLayout.createSequentialGroup()
+            .addGap(40, 40, 40)
+            .addComponent(jLabel8)
+            .addGap(30, 30, 30)
+            .addComponent(txtNoAsientos3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+            .addComponent(jLabel9)
+            .addGap(30, 30, 30)
+            .addComponent(txtCostoA3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(30, 30, 30))
+    );
+    pnlTerceraLayout.setVerticalGroup(
+        pnlTerceraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(pnlTerceraLayout.createSequentialGroup()
+            .addContainerGap()
+            .addGroup(pnlTerceraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jLabel8)
-                .addGap(30, 30, 30)
                 .addComponent(txtNoAsientos3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
                 .addComponent(jLabel9)
-                .addGap(30, 30, 30)
-                .addComponent(txtCostoA3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30))
-        );
-        pnlTerceraLayout.setVerticalGroup(
-            pnlTerceraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlTerceraLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlTerceraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(txtNoAsientos3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9)
-                    .addComponent(txtCostoA3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(19, Short.MAX_VALUE))
-        );
+                .addComponent(txtCostoA3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addContainerGap(19, Short.MAX_VALUE))
+    );
 
-        dateChooserCombo1.addSelectionChangedListener(new datechooser.events.SelectionChangedListener() {
-            public void onSelectionChange(datechooser.events.SelectionChangedEvent evt) {
-                dateChooserCombo1OnSelectionChange(evt);
-            }
-        });
+    pnlTercera1.setBorder(javax.swing.BorderFactory.createTitledBorder("Vuelos Clase Ejecutiva"));
 
-        pnlTercera1.setBorder(javax.swing.BorderFactory.createTitledBorder("Vuelos Clase Ejecutiva"));
+    jLabel10.setFont(new java.awt.Font("Berlin Sans FB", 0, 14)); // NOI18N
+    jLabel10.setText("No. de Asientos:");
 
-        jLabel10.setFont(new java.awt.Font("Berlin Sans FB", 0, 14)); // NOI18N
-        jLabel10.setText("No. de Asientos:");
+    txtNoAsientos2.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            txtNoAsientos2KeyTyped(evt);
+        }
+    });
 
-        txtNoAsientos2.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNoAsientos2KeyTyped(evt);
-            }
-        });
+    jLabel11.setFont(new java.awt.Font("Berlin Sans FB", 0, 14)); // NOI18N
+    jLabel11.setText("Costo por Asiento:");
 
-        jLabel11.setFont(new java.awt.Font("Berlin Sans FB", 0, 14)); // NOI18N
-        jLabel11.setText("Costo por Asiento:");
+    txtCostoA2.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            txtCostoA2KeyTyped(evt);
+        }
+    });
 
-        txtCostoA2.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtCostoA2KeyTyped(evt);
-            }
-        });
-
-        javax.swing.GroupLayout pnlTercera1Layout = new javax.swing.GroupLayout(pnlTercera1);
-        pnlTercera1.setLayout(pnlTercera1Layout);
-        pnlTercera1Layout.setHorizontalGroup(
-            pnlTercera1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlTercera1Layout.createSequentialGroup()
-                .addGap(40, 40, 40)
+    javax.swing.GroupLayout pnlTercera1Layout = new javax.swing.GroupLayout(pnlTercera1);
+    pnlTercera1.setLayout(pnlTercera1Layout);
+    pnlTercera1Layout.setHorizontalGroup(
+        pnlTercera1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(pnlTercera1Layout.createSequentialGroup()
+            .addGap(40, 40, 40)
+            .addComponent(jLabel10)
+            .addGap(30, 30, 30)
+            .addComponent(txtNoAsientos2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+            .addComponent(jLabel11)
+            .addGap(30, 30, 30)
+            .addComponent(txtCostoA2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(30, 30, 30))
+    );
+    pnlTercera1Layout.setVerticalGroup(
+        pnlTercera1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(pnlTercera1Layout.createSequentialGroup()
+            .addContainerGap()
+            .addGroup(pnlTercera1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jLabel10)
-                .addGap(30, 30, 30)
                 .addComponent(txtNoAsientos2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
                 .addComponent(jLabel11)
-                .addGap(30, 30, 30)
-                .addComponent(txtCostoA2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30))
-        );
-        pnlTercera1Layout.setVerticalGroup(
-            pnlTercera1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlTercera1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlTercera1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(txtNoAsientos2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel11)
-                    .addComponent(txtCostoA2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(19, Short.MAX_VALUE))
-        );
+                .addComponent(txtCostoA2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addContainerGap(19, Short.MAX_VALUE))
+    );
 
-        dateChooserCombo2.addSelectionChangedListener(new datechooser.events.SelectionChangedListener() {
-            public void onSelectionChange(datechooser.events.SelectionChangedEvent evt) {
-                dateChooserCombo2OnSelectionChange(evt);
-            }
-        });
+    fechallegada.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
+        new datechooser.view.appearance.ViewAppearance("custom",
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                new java.awt.Color(0, 0, 0),
+                new java.awt.Color(0, 0, 255),
+                false,
+                true,
+                new datechooser.view.appearance.swing.ButtonPainter()),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                new java.awt.Color(0, 0, 0),
+                new java.awt.Color(0, 0, 255),
+                true,
+                true,
+                new datechooser.view.appearance.swing.ButtonPainter()),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                new java.awt.Color(0, 0, 255),
+                new java.awt.Color(0, 0, 255),
+                false,
+                true,
+                new datechooser.view.appearance.swing.ButtonPainter()),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                new java.awt.Color(128, 128, 128),
+                new java.awt.Color(0, 0, 255),
+                false,
+                true,
+                new datechooser.view.appearance.swing.LabelPainter()),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                new java.awt.Color(0, 0, 0),
+                new java.awt.Color(0, 0, 255),
+                false,
+                true,
+                new datechooser.view.appearance.swing.LabelPainter()),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                new java.awt.Color(0, 0, 0),
+                new java.awt.Color(255, 0, 0),
+                false,
+                false,
+                new datechooser.view.appearance.swing.ButtonPainter()),
+            (datechooser.view.BackRenderer)null,
+            false,
+            true)));
+fechallegada.setWeekStyle(datechooser.view.WeekDaysStyle.SHORT);
+fechallegada.addSelectionChangedListener(new datechooser.events.SelectionChangedListener() {
+    public void onSelectionChange(datechooser.events.SelectionChangedEvent evt) {
+        fechallegadaOnSelectionChange(evt);
+    }
+    });
 
-        lblDirec4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lblDirec4.setText("Id. Vuelo:");
+    lblDirec4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+    lblDirec4.setText("Id. Vuelo:");
 
-        lblID.setText("01");
+    lblID.setText("01");
 
-        lblDirec5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lblDirec5.setText("Estado Inicial");
+    lblDirec5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+    lblDirec5.setText("Estado Inicial");
 
-        jLabel2.setText("En Aeropuerto");
+    jLabel2.setText("En Aeropuerto");
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(25, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(pnlTercera1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(pnlTercera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(pnlPrimera1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 466, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(19, 19, 19))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(74, 74, 74))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnGuardar)
-                .addGap(97, 97, 97)
-                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(97, 97, 97))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblDirec1)
-                            .addComponent(lblNick1)
-                            .addComponent(lblDirec2))
-                        .addGap(29, 29, 29)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(combAeropuerto, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(comboLugarLlegada, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(dateChooserCombo1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblDirec3)
-                            .addComponent(lblDirec4)
-                            .addComponent(lblDirec5))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(dateChooserCombo2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblID)
-                                    .addComponent(jLabel2))
-                                .addGap(0, 0, Short.MAX_VALUE)))))
-                .addGap(28, 28, 28))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(14, 14, 14)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblNick1)
-                    .addComponent(combAeropuerto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblDirec1)
-                    .addComponent(comboLugarLlegada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblDirec2)
-                    .addComponent(dateChooserCombo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(7, 7, 7)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblDirec3)
-                    .addComponent(dateChooserCombo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblDirec4)
-                    .addComponent(lblID))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
+    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+    getContentPane().setLayout(layout);
+    layout.setHorizontalGroup(
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(layout.createSequentialGroup()
+            .addGap(20, 20, 20)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addContainerGap(25, Short.MAX_VALUE))
+        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(pnlTercera1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pnlTercera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pnlPrimera1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 466, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGap(19, 19, 19))
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(74, 74, 74))))
+        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnGuardar)
+            .addGap(97, 97, 97)
+            .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(97, 97, 97))
+        .addGroup(layout.createSequentialGroup()
+            .addGap(40, 40, 40)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(lblDirec1)
+                        .addComponent(lblNick1)
+                        .addComponent(lblDirec2))
+                    .addGap(29, 29, 29)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(comboSalida, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(comboLugarLlegada, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(fechasalida, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(layout.createSequentialGroup()
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(lblDirec3)
+                        .addComponent(lblDirec4)
                         .addComponent(lblDirec5))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel2)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pnlPrimera1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pnlTercera1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(11, 11, 11)
-                .addComponent(pnlTercera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnGuardar)
-                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+                    .addGap(18, 18, 18)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(fechallegada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(lblID)
+                                .addComponent(jLabel2))
+                            .addGap(0, 0, Short.MAX_VALUE)))))
+            .addGap(28, 28, 28))
+    );
+    layout.setVerticalGroup(
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(layout.createSequentialGroup()
+            .addContainerGap()
+            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(14, 14, 14)
+            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(lblNick1)
+                .addComponent(comboSalida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGap(10, 10, 10)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(lblDirec1)
+                .addComponent(comboLugarLlegada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGap(10, 10, 10)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(lblDirec2)
+                .addComponent(fechasalida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGap(7, 7, 7)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(lblDirec3)
+                .addComponent(fechallegada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGap(10, 10, 10)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(lblDirec4)
+                .addComponent(lblID))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(10, 10, 10)
+                    .addComponent(lblDirec5))
+                .addGroup(layout.createSequentialGroup()
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(jLabel2)))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addComponent(pnlPrimera1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addComponent(pnlTercera1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(11, 11, 11)
+            .addComponent(pnlTercera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(18, 18, 18)
+            .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(btnGuardar)
+                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+    );
 
-        pack();
+    pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -424,12 +526,56 @@ public class CrearVuelo extends javax.swing.JFrame {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         lblError.setText("");
+        lblError.setVisible(true);
         if (validarCampos() == false) {
             lblError.setText("Por favor llene todos los campos para continuar.");
-            lblError.setVisible(true);
+
         } else {
+            String lugarLlegada, aeropuerto, horaFechaSalida, horaFechaLlegada, cantidadPrimeraClase, costoPrimeraClase, cantidadClaseTurista, costoClaseTurista, cantidadClaseEjecutiva, costoClaseEjecutiva;
+            lugarLlegada = aeropuerto = "";
+            boolean c = true;
+            try {
+                lugarLlegada = this.comboLugarLlegada.getSelectedItem().toString();
+                aeropuerto = this.comboSalida.getSelectedItem().toString();
+            } catch (Exception e) {
+                c = false;
+            }
+            if (c) {
+                if (lugarLlegada == aeropuerto) {
+                    lblError.setText("El lugar de llegada y el de salida deben ser diferentes.");
+                } else {
+
+                    horaFechaSalida = this.fechasalida.getText();
+                    horaFechaLlegada = this.fechallegada.getText();
+                    cantidadPrimeraClase = this.txtNoAsientos1.getText();
+                    costoPrimeraClase = this.txtCostoA1.getText();
+                    cantidadClaseTurista = this.txtNoAsientos3.getText();
+                    costoClaseTurista = this.txtCostoA2.getText();
+                    cantidadClaseEjecutiva = this.txtNoAsientos3.getText();
+                    costoClaseEjecutiva = this.txtCostoA2.getText();
+
+                     horaFechaLlegada = horaFechaLlegada.replace(" ", "-");
+                     System.out.println("");
+                    horaFechaSalida = horaFechaSalida.replace(" ", "-");
+                    String url = "http://127.0.0.1:5000/vuelosInsertar"
+                            + "/" + lugarLlegada + "/"
+                            + aeropuerto + "/" + horaFechaSalida + "/" + horaFechaLlegada + "/"
+                            + cantidadPrimeraClase + "/" + costoPrimeraClase + "/"
+                            + cantidadClaseTurista + "/" + costoClaseTurista + "/" + cantidadClaseEjecutiva + "/"
+                            + costoClaseEjecutiva;
+                    String res = crearConexion.crearConexion(url, "HTTP");
+                    showMessageDialog(null, "Vuelo creado exitosamente");
+                    menu.setVisible(true);
+                    dispose();
+
+                }
+
+            } else {
+                showMessageDialog(null, "Debe crear primero los aeropuertos !");
+            }
 
         }
+
         // TODO add your handling code here:
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -501,9 +647,9 @@ public class CrearVuelo extends javax.swing.JFrame {
         }         // TODO add your handling code here:
     }//GEN-LAST:event_txtCostoA3KeyTyped
 
-    private void dateChooserCombo1OnSelectionChange(datechooser.events.SelectionChangedEvent evt) {//GEN-FIRST:event_dateChooserCombo1OnSelectionChange
+    private void fechasalidaOnSelectionChange(datechooser.events.SelectionChangedEvent evt) {//GEN-FIRST:event_fechasalidaOnSelectionChange
         // TODO add your handling code here:
-    }//GEN-LAST:event_dateChooserCombo1OnSelectionChange
+    }//GEN-LAST:event_fechasalidaOnSelectionChange
 
     private void txtNoAsientos2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoAsientos2KeyTyped
         char c = evt.getKeyChar();
@@ -539,15 +685,20 @@ public class CrearVuelo extends javax.swing.JFrame {
         }         // TODO add your handling code here:
     }//GEN-LAST:event_txtCostoA2KeyTyped
 
-    private void dateChooserCombo2OnSelectionChange(datechooser.events.SelectionChangedEvent evt) {//GEN-FIRST:event_dateChooserCombo2OnSelectionChange
+    private void fechallegadaOnSelectionChange(datechooser.events.SelectionChangedEvent evt) {//GEN-FIRST:event_fechallegadaOnSelectionChange
         // TODO add your handling code here:
-    }//GEN-LAST:event_dateChooserCombo2OnSelectionChange
+    }//GEN-LAST:event_fechallegadaOnSelectionChange
 
     public boolean validarCampos() {
         if (txtCostoA1.getText().equals("") || txtCostoA2.getText().equals("") || txtCostoA3.getText().equals("")
                 || txtNoAsientos1.getText().equals("") || txtNoAsientos2.getText().equals("") || txtNoAsientos3.getText().equals("")
-                || (combAeropuerto.getModel().getSelectedItem()=="") | (comboLugarLlegada.getModel().getSelectedItem()!="") || dateChooserCombo1.getText().equals("")) {
+                || (comboSalida.getSelectedItem().toString() == "(Seleccione un Aeropuerto)") | (comboLugarLlegada.getSelectedItem().toString() == "(Seleccione un Aeropuerto)") || fechasalida.getText().equals("") || fechallegada.getText().equals("")) {
             System.out.println("falso");
+            System.out.println(comboSalida.getSelectedItem().toString());
+            System.out.println(comboLugarLlegada.getSelectedItem().toString());
+            System.out.println(fechasalida.getText());
+            System.out.println(fechallegada.getText());
+
             return false;
 
         } else {
@@ -563,18 +714,16 @@ public class CrearVuelo extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnGuardar;
-    private javax.swing.JComboBox combAeropuerto;
     private javax.swing.JComboBox comboLugarLlegada;
-    private datechooser.beans.DateChooserCombo dateChooserCombo1;
-    private datechooser.beans.DateChooserCombo dateChooserCombo2;
+    private javax.swing.JComboBox comboSalida;
+    private datechooser.beans.DateChooserCombo fechallegada;
+    public datechooser.beans.DateChooserCombo fechasalida;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JSeparator jSeparator1;
@@ -588,7 +737,6 @@ public class CrearVuelo extends javax.swing.JFrame {
     private javax.swing.JLabel lblID;
     private javax.swing.JLabel lblNick1;
     private javax.swing.JPanel pnlPrimera1;
-    private javax.swing.JPanel pnlSegunda1;
     private javax.swing.JPanel pnlTercera;
     private javax.swing.JPanel pnlTercera1;
     private javax.swing.JTextField txtCostoA1;
@@ -597,7 +745,5 @@ public class CrearVuelo extends javax.swing.JFrame {
     private javax.swing.JTextField txtNoAsientos1;
     private javax.swing.JTextField txtNoAsientos2;
     private javax.swing.JTextField txtNoAsientos3;
-    private javax.swing.JTextField txtNoAsientos4;
-    private javax.swing.JTextField txtNoAsientos5;
     // End of variables declaration//GEN-END:variables
 }

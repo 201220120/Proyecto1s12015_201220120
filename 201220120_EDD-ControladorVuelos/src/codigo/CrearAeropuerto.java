@@ -9,6 +9,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.swing.ImageIcon;
+import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.WindowConstants;
 
 /**
@@ -45,7 +46,7 @@ public class CrearAeropuerto extends javax.swing.JFrame {
             }
         });
         setLocationRelativeTo(null);
-        setTitle("Menu - Crear Usuario");
+        setTitle("Menu - Crear Aeropuerto");
     }
 
     public void datosVentana() {
@@ -65,7 +66,7 @@ public class CrearAeropuerto extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         lblNick = new javax.swing.JLabel();
-        txtContraseña = new javax.swing.JTextField();
+        txtContraseña = new javax.swing.JPasswordField();
         btnGuardar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         lblNick1 = new javax.swing.JLabel();
@@ -210,6 +211,16 @@ public class CrearAeropuerto extends javax.swing.JFrame {
             if (txtContraseña.getText().length() < 6) {
                 lblError.setText("La contraseña debe contener por lo menos 6 caracteres.");
                 lblError.setVisible(true);
+
+            } else {
+                String url = "http://127.0.0.1:5000/aeropuertoInsertar/"
+                        + txtNombre.getText() + "/"
+                        + txtPais.getText() + "/"
+                        + txtContraseña.getText();
+                String res = crearConexion.crearConexion(url, "HTTP");
+                showMessageDialog(null, "Aeropuerto creado exitosamente");
+                menu.setVisible(true);
+                dispose();
 
             }
         }

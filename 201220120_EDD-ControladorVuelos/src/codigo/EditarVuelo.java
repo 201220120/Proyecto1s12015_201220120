@@ -6,10 +6,15 @@
 package codigo;
 
 import datechooser.beans.DateChooserDialog;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.StringTokenizer;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.WindowConstants;
 
 /**
@@ -46,11 +51,66 @@ public class EditarVuelo extends javax.swing.JFrame {
             }
         });
         setLocationRelativeTo(null);
-        setTitle("Menu - Crear Usuario");
+        setTitle("Menu - Modificar Vuelo");
     }
+    boolean control;
 
     public void datosVentana() {
-        lblError.setVisible(false);
+        lblError.setText("");
+        lblError.setVisible(true);
+        String url2 = "http://127.0.0.1:5000/get_aeropuertos/";
+        String res2 = crearConexion.crearConexion(url2, "HTTP");
+
+        StringTokenizer token = new StringTokenizer(res2, ",");
+        while (token.hasMoreTokens()) {
+            String a = token.nextToken();
+            this.combAeropuerto.addItem(a);
+            this.comboLugarLlegada.addItem(a);
+
+        }
+
+        String url = "http://127.0.0.1:5000/get_vuelos";
+        String res = crearConexion.crearConexion(url, "HTTP");
+
+        control = false;
+        StringTokenizer tokens = new StringTokenizer(res, ",");
+        while (tokens.hasMoreTokens()) {
+            String a = tokens.nextToken();
+            this.comboId.addItem(a);
+        }
+        comboId.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String opc = comboId.getSelectedItem().toString();
+                if (opc != "(Seleccione un Id. de Vuelo)") {
+                    String url = "http://127.0.0.1:5000/get_datos_vuelo/" + opc;
+                    String res = crearConexion.crearConexion(url, "HTTP");
+
+                    StringTokenizer tokens = new StringTokenizer(res, ",");
+                    comboLugarLlegada.setSelectedItem(tokens.nextToken());
+
+                    combAeropuerto.setSelectedItem(tokens.nextToken());
+                    String a = tokens.nextToken();
+                    a = a.replace("-", " ");
+                    fechasalida.setText(a);
+                    String b = tokens.nextToken();
+                    b = b.replace("-", " ");
+                    fechallegada.setText(b);
+                    txtNoAsientos1.setText(tokens.nextToken());
+                    txtCostoA1.setText(tokens.nextToken());
+                    txtNoAsientos2.setText(tokens.nextToken());
+                    txtCostoA2.setText(tokens.nextToken());
+                    txtNoAsientos3.setText(tokens.nextToken());
+                    txtCostoA3.setText(tokens.nextToken());
+                    String cadena = tokens.nextToken();
+                    cadena = cadena.replace("-", " ");
+                    comboEstado.setSelectedItem(cadena);
+                    control = true;
+                } else {
+                    reiniciar();
+                }
+
+            }
+        });
 
     }
 
@@ -85,17 +145,18 @@ public class EditarVuelo extends javax.swing.JFrame {
         txtNoAsientos3 = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         txtCostoA3 = new javax.swing.JTextField();
-        dateChooserCombo1 = new datechooser.beans.DateChooserCombo();
+        fechasalida = new datechooser.beans.DateChooserCombo();
         pnlTercera1 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         txtNoAsientos2 = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         txtCostoA2 = new javax.swing.JTextField();
-        dateChooserCombo2 = new datechooser.beans.DateChooserCombo();
+        fechallegada = new datechooser.beans.DateChooserCombo();
         lblDirec4 = new javax.swing.JLabel();
-        lblId = new javax.swing.JLabel();
         lblDirec5 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        comboEstado = new javax.swing.JComboBox();
+        comboId = new javax.swing.JComboBox();
+        btnEliminar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -189,7 +250,7 @@ public class EditarVuelo extends javax.swing.JFrame {
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
-        pnlTercera.setBorder(javax.swing.BorderFactory.createTitledBorder("Vuelos Clase Ejecutiva"));
+        pnlTercera.setBorder(javax.swing.BorderFactory.createTitledBorder("Vuelos Clase Turista"));
 
         jLabel8.setFont(new java.awt.Font("Berlin Sans FB", 0, 14)); // NOI18N
         jLabel8.setText("No. de Asientos:");
@@ -236,181 +297,278 @@ public class EditarVuelo extends javax.swing.JFrame {
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
-        dateChooserCombo1.addSelectionChangedListener(new datechooser.events.SelectionChangedListener() {
-            public void onSelectionChange(datechooser.events.SelectionChangedEvent evt) {
-                dateChooserCombo1OnSelectionChange(evt);
-            }
-        });
+        fechasalida.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
+            new datechooser.view.appearance.ViewAppearance("custom",
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 0),
+                    new java.awt.Color(0, 0, 255),
+                    false,
+                    true,
+                    new datechooser.view.appearance.swing.ButtonPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 0),
+                    new java.awt.Color(0, 0, 255),
+                    true,
+                    true,
+                    new datechooser.view.appearance.swing.ButtonPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 255),
+                    new java.awt.Color(0, 0, 255),
+                    false,
+                    true,
+                    new datechooser.view.appearance.swing.ButtonPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(128, 128, 128),
+                    new java.awt.Color(0, 0, 255),
+                    false,
+                    true,
+                    new datechooser.view.appearance.swing.LabelPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 0),
+                    new java.awt.Color(0, 0, 255),
+                    false,
+                    true,
+                    new datechooser.view.appearance.swing.LabelPainter()),
+                new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                    new java.awt.Color(0, 0, 0),
+                    new java.awt.Color(255, 0, 0),
+                    false,
+                    false,
+                    new datechooser.view.appearance.swing.ButtonPainter()),
+                (datechooser.view.BackRenderer)null,
+                false,
+                true)));
+    fechasalida.addSelectionChangedListener(new datechooser.events.SelectionChangedListener() {
+        public void onSelectionChange(datechooser.events.SelectionChangedEvent evt) {
+            fechasalidaOnSelectionChange(evt);
+        }
+    });
 
-        pnlTercera1.setBorder(javax.swing.BorderFactory.createTitledBorder("Vuelos Clase Ejecutiva"));
+    pnlTercera1.setBorder(javax.swing.BorderFactory.createTitledBorder("Vuelos Clase Ejecutiva"));
 
-        jLabel10.setFont(new java.awt.Font("Berlin Sans FB", 0, 14)); // NOI18N
-        jLabel10.setText("No. de Asientos:");
+    jLabel10.setFont(new java.awt.Font("Berlin Sans FB", 0, 14)); // NOI18N
+    jLabel10.setText("No. de Asientos:");
 
-        txtNoAsientos2.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNoAsientos2KeyTyped(evt);
-            }
-        });
+    txtNoAsientos2.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            txtNoAsientos2KeyTyped(evt);
+        }
+    });
 
-        jLabel11.setFont(new java.awt.Font("Berlin Sans FB", 0, 14)); // NOI18N
-        jLabel11.setText("Costo por Asiento:");
+    jLabel11.setFont(new java.awt.Font("Berlin Sans FB", 0, 14)); // NOI18N
+    jLabel11.setText("Costo por Asiento:");
 
-        txtCostoA2.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtCostoA2KeyTyped(evt);
-            }
-        });
+    txtCostoA2.addKeyListener(new java.awt.event.KeyAdapter() {
+        public void keyTyped(java.awt.event.KeyEvent evt) {
+            txtCostoA2KeyTyped(evt);
+        }
+    });
 
-        javax.swing.GroupLayout pnlTercera1Layout = new javax.swing.GroupLayout(pnlTercera1);
-        pnlTercera1.setLayout(pnlTercera1Layout);
-        pnlTercera1Layout.setHorizontalGroup(
-            pnlTercera1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlTercera1Layout.createSequentialGroup()
-                .addGap(40, 40, 40)
+    javax.swing.GroupLayout pnlTercera1Layout = new javax.swing.GroupLayout(pnlTercera1);
+    pnlTercera1.setLayout(pnlTercera1Layout);
+    pnlTercera1Layout.setHorizontalGroup(
+        pnlTercera1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(pnlTercera1Layout.createSequentialGroup()
+            .addGap(40, 40, 40)
+            .addComponent(jLabel10)
+            .addGap(30, 30, 30)
+            .addComponent(txtNoAsientos2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+            .addComponent(jLabel11)
+            .addGap(30, 30, 30)
+            .addComponent(txtCostoA2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(30, 30, 30))
+    );
+    pnlTercera1Layout.setVerticalGroup(
+        pnlTercera1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(pnlTercera1Layout.createSequentialGroup()
+            .addContainerGap()
+            .addGroup(pnlTercera1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jLabel10)
-                .addGap(30, 30, 30)
                 .addComponent(txtNoAsientos2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
                 .addComponent(jLabel11)
-                .addGap(30, 30, 30)
-                .addComponent(txtCostoA2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30))
-        );
-        pnlTercera1Layout.setVerticalGroup(
-            pnlTercera1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlTercera1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlTercera1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(txtNoAsientos2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel11)
-                    .addComponent(txtCostoA2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(19, Short.MAX_VALUE))
-        );
+                .addComponent(txtCostoA2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addContainerGap(19, Short.MAX_VALUE))
+    );
 
-        dateChooserCombo2.addSelectionChangedListener(new datechooser.events.SelectionChangedListener() {
-            public void onSelectionChange(datechooser.events.SelectionChangedEvent evt) {
-                dateChooserCombo2OnSelectionChange(evt);
-            }
-        });
+    fechallegada.setCurrentView(new datechooser.view.appearance.AppearancesList("Light",
+        new datechooser.view.appearance.ViewAppearance("custom",
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                new java.awt.Color(0, 0, 0),
+                new java.awt.Color(0, 0, 255),
+                false,
+                true,
+                new datechooser.view.appearance.swing.ButtonPainter()),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                new java.awt.Color(0, 0, 0),
+                new java.awt.Color(0, 0, 255),
+                true,
+                true,
+                new datechooser.view.appearance.swing.ButtonPainter()),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                new java.awt.Color(0, 0, 255),
+                new java.awt.Color(0, 0, 255),
+                false,
+                true,
+                new datechooser.view.appearance.swing.ButtonPainter()),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                new java.awt.Color(128, 128, 128),
+                new java.awt.Color(0, 0, 255),
+                false,
+                true,
+                new datechooser.view.appearance.swing.LabelPainter()),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                new java.awt.Color(0, 0, 0),
+                new java.awt.Color(0, 0, 255),
+                false,
+                true,
+                new datechooser.view.appearance.swing.LabelPainter()),
+            new datechooser.view.appearance.swing.SwingCellAppearance(new java.awt.Font("Tahoma", java.awt.Font.PLAIN, 11),
+                new java.awt.Color(0, 0, 0),
+                new java.awt.Color(255, 0, 0),
+                false,
+                false,
+                new datechooser.view.appearance.swing.ButtonPainter()),
+            (datechooser.view.BackRenderer)null,
+            false,
+            true)));
+fechallegada.setFormat(1);
+fechallegada.addSelectionChangedListener(new datechooser.events.SelectionChangedListener() {
+    public void onSelectionChange(datechooser.events.SelectionChangedEvent evt) {
+        fechallegadaOnSelectionChange(evt);
+    }
+    });
 
-        lblDirec4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lblDirec4.setText("Id. Vuelo:");
+    lblDirec4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+    lblDirec4.setText("Id. Vuelo:");
 
-        lblId.setText("01");
+    lblDirec5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+    lblDirec5.setText("Estado Inicial");
 
-        lblDirec5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lblDirec5.setText("Estado Inicial");
+    comboEstado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "En Aeropuerto", "En Vuelo", "En Arribo" }));
 
-        jLabel2.setText("En Aeropuerto");
+    comboId.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "(Seleccione un Id. de Vuelo)" }));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(25, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(pnlTercera1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(pnlTercera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(pnlPrimera1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 466, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(19, 19, 19))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(74, 74, 74))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnGuardar)
-                .addGap(97, 97, 97)
-                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(97, 97, 97))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblDirec1)
-                            .addComponent(lblNick1)
-                            .addComponent(lblDirec2))
-                        .addGap(29, 29, 29)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(combAeropuerto, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(comboLugarLlegada, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(dateChooserCombo1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblDirec3)
-                            .addComponent(lblDirec4)
-                            .addComponent(lblDirec5))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(dateChooserCombo2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblId)
-                                    .addComponent(jLabel2))
-                                .addGap(0, 0, Short.MAX_VALUE)))))
-                .addGap(28, 28, 28))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(14, 14, 14)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+    btnEliminar.setText("Eliminar");
+    btnEliminar.setMaximumSize(new java.awt.Dimension(117, 23));
+    btnEliminar.setMinimumSize(new java.awt.Dimension(117, 23));
+    btnEliminar.setPreferredSize(new java.awt.Dimension(117, 23));
+    btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnEliminarActionPerformed(evt);
+        }
+    });
+
+    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+    getContentPane().setLayout(layout);
+    layout.setHorizontalGroup(
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(layout.createSequentialGroup()
+            .addGap(20, 20, 20)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addContainerGap(25, Short.MAX_VALUE))
+        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(pnlTercera1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pnlTercera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pnlPrimera1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 466, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGap(19, 19, 19))
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(74, 74, 74))))
+        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGap(46, 46, 46)
+            .addComponent(btnGuardar)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(32, 32, 32)
+            .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(43, 43, 43))
+        .addGroup(layout.createSequentialGroup()
+            .addGap(40, 40, 40)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(lblDirec3)
+                        .addComponent(lblDirec5))
+                    .addGap(18, 18, 18)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(comboEstado, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(fechallegada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(layout.createSequentialGroup()
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(lblDirec1)
+                        .addComponent(lblNick1)
+                        .addComponent(lblDirec2)
+                        .addComponent(lblDirec4))
+                    .addGap(29, 29, 29)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(combAeropuerto, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(comboLugarLlegada, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(fechasalida, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(comboId, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+            .addGap(28, 28, 28))
+    );
+    layout.setVerticalGroup(
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(layout.createSequentialGroup()
+            .addContainerGap()
+            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(14, 14, 14)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(2, 2, 2)
+                    .addComponent(lblDirec4))
+                .addGroup(layout.createSequentialGroup()
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(comboId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(lblNick1)
+                .addComponent(combAeropuerto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGap(10, 10, 10)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(lblDirec1)
+                .addComponent(comboLugarLlegada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGap(10, 10, 10)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(lblDirec2)
+                .addComponent(fechasalida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGap(10, 10, 10)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(lblDirec3)
+                .addComponent(fechallegada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGap(10, 10, 10)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(lblDirec5)
+                .addComponent(comboEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addComponent(pnlPrimera1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+            .addComponent(pnlTercera1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(11, 11, 11)
+            .addComponent(pnlTercera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGap(18, 18, 18)
+            .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblNick1)
-                    .addComponent(combAeropuerto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblDirec1)
-                    .addComponent(comboLugarLlegada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblDirec2)
-                    .addComponent(dateChooserCombo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(7, 7, 7)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblDirec3)
-                    .addComponent(dateChooserCombo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblDirec4)
-                    .addComponent(lblId))
-                .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblDirec5)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pnlPrimera1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pnlTercera1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(11, 11, 11)
-                .addComponent(pnlTercera, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnGuardar)
-                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnGuardar))
+            .addContainerGap(34, Short.MAX_VALUE))
+    );
 
-        pack();
+    pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -421,12 +579,54 @@ public class EditarVuelo extends javax.swing.JFrame {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         lblError.setText("");
-        if (validarCampos() == false) {
-            lblError.setText("Por favor llene todos los campos para continuar.");
-            lblError.setVisible(true);
-        } else {
 
+        if (control != true) {
+            lblError.setText("Primero debe seleccionar un Vuelo a modificar");
+        } else {
+            if (validarCampos() == false) {
+                lblError.setText("Por favor llene todos los campos para continuar.");
+
+            } else {
+                String lugarLlegada, aeropuerto, horaFechaSalida, estado, horaFechaLlegada, cantidadPrimeraClase, costoPrimeraClase, cantidadClaseTurista, costoClaseTurista, cantidadClaseEjecutiva, costoClaseEjecutiva, id_viejo;
+
+                lugarLlegada = comboLugarLlegada.getSelectedItem().toString();
+                aeropuerto = combAeropuerto.getSelectedItem().toString();
+
+                if (lugarLlegada == aeropuerto) {
+                    lblError.setText("El lugar de llegada y el de salida deben ser diferentes.");
+                } else {
+
+                    horaFechaSalida = fechasalida.getText();
+                    horaFechaLlegada = fechallegada.getText();
+                    cantidadPrimeraClase = txtNoAsientos1.getText();
+                    costoPrimeraClase = txtCostoA1.getText();
+                    cantidadClaseTurista = txtNoAsientos3.getText();
+                    costoClaseTurista = txtCostoA2.getText();
+                    cantidadClaseEjecutiva = txtNoAsientos3.getText();
+                    costoClaseEjecutiva = txtCostoA2.getText();
+                    estado = comboEstado.getSelectedItem().toString();
+                    estado = estado.replace(" ", "-");
+                    id_viejo = comboId.getSelectedItem().toString();
+                    horaFechaLlegada = horaFechaLlegada.replace(" ", "-");
+                    horaFechaSalida = horaFechaSalida.replace(" ", "-");
+                    System.out.println(horaFechaLlegada);
+                    System.out.println(horaFechaSalida);
+                    String url = "http://127.0.0.1:5000/modificarDatosVuelo/"
+                            + lugarLlegada + "/" + aeropuerto + "/" + horaFechaSalida + "/"
+                            + horaFechaLlegada + "/" + cantidadPrimeraClase + "/"
+                            + costoPrimeraClase + "/" + cantidadClaseTurista + "/"
+                            + costoClaseTurista + "/" + cantidadClaseEjecutiva + "/"
+                            + costoClaseEjecutiva + "/" + id_viejo + "/" + estado;
+                    String res = crearConexion.crearConexion(url, "HTTP");
+                    showMessageDialog(null, "Datos modificados exitosamente");
+                    menu.setVisible(true);
+                    dispose();
+
+                }
+
+            }
         }
+
         // TODO add your handling code here:
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -498,9 +698,9 @@ public class EditarVuelo extends javax.swing.JFrame {
         }         // TODO add your handling code here:
     }//GEN-LAST:event_txtCostoA3KeyTyped
 
-    private void dateChooserCombo1OnSelectionChange(datechooser.events.SelectionChangedEvent evt) {//GEN-FIRST:event_dateChooserCombo1OnSelectionChange
+    private void fechasalidaOnSelectionChange(datechooser.events.SelectionChangedEvent evt) {//GEN-FIRST:event_fechasalidaOnSelectionChange
         // TODO add your handling code here:
-    }//GEN-LAST:event_dateChooserCombo1OnSelectionChange
+    }//GEN-LAST:event_fechasalidaOnSelectionChange
 
     private void txtNoAsientos2KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoAsientos2KeyTyped
         char c = evt.getKeyChar();
@@ -536,14 +736,56 @@ public class EditarVuelo extends javax.swing.JFrame {
         }         // TODO add your handling code here:
     }//GEN-LAST:event_txtCostoA2KeyTyped
 
-    private void dateChooserCombo2OnSelectionChange(datechooser.events.SelectionChangedEvent evt) {//GEN-FIRST:event_dateChooserCombo2OnSelectionChange
+    private void fechallegadaOnSelectionChange(datechooser.events.SelectionChangedEvent evt) {//GEN-FIRST:event_fechallegadaOnSelectionChange
         // TODO add your handling code here:
-    }//GEN-LAST:event_dateChooserCombo2OnSelectionChange
+    }//GEN-LAST:event_fechallegadaOnSelectionChange
+
+    public void reiniciar() {
+
+        comboLugarLlegada.setSelectedItem("(Seleccione un Aeropuerto)");
+        combAeropuerto.setSelectedItem("(Seleccione un Aeropuerto)");
+
+        txtNoAsientos1.setText("");
+        txtCostoA1.setText("");
+        txtNoAsientos2.setText("");
+        txtCostoA2.setText("");
+        txtNoAsientos3.setText("");
+        txtCostoA3.setText("");
+        comboEstado.setSelectedItem("En Aeropuerto");
+        control = false;
+    }
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        if (control != true) {
+            lblError.setText("Primero debe seleccionar un Vuelo a eliminar");
+        } else {
+
+            if (comboEstado.getSelectedItem().toString().equals("En Vuelo")) {
+                showMessageDialog(null, "¡El Avión ya despego, no se puede eliminar!");
+            } else {
+                int opcion = JOptionPane.showConfirmDialog(null, "¿Desea eliminar el vuelo de la Base de Datos?", "Aviso", JOptionPane.YES_NO_OPTION);
+
+                if (opcion == 0) { //The ISSUE is here
+                    String opc = comboId.getSelectedItem().toString();
+                    int index = comboId.getSelectedIndex();
+                    String url = "http://127.0.0.1:5000/eliminarVuelo/" + opc;
+                    String res = crearConexion.crearConexion(url, "HTTP");
+                    comboId.removeItemAt(index);
+                    reiniciar();
+                } else {
+
+                }
+
+            }
+
+        }
+
+// TODO add your handling code here:
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     public boolean validarCampos() {
         if (txtCostoA1.getText().equals("") || txtCostoA2.getText().equals("") || txtCostoA3.getText().equals("")
                 || txtNoAsientos1.getText().equals("") || txtNoAsientos2.getText().equals("") || txtNoAsientos3.getText().equals("")
-                || (combAeropuerto.getModel().getSelectedItem()=="") | (comboLugarLlegada.getModel().getSelectedItem()!="") || dateChooserCombo1.getText().equals("")) {
+                || (combAeropuerto.getSelectedItem().toString() == "(Seleccione un Aeropuerto)") | (comboLugarLlegada.getSelectedItem().toString() == "(Seleccione un Aeropuerto)") || fechasalida.getText().equals("")) {
             System.out.println("falso");
             return false;
 
@@ -559,15 +801,17 @@ public class EditarVuelo extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JComboBox combAeropuerto;
+    private javax.swing.JComboBox comboEstado;
+    private javax.swing.JComboBox comboId;
     private javax.swing.JComboBox comboLugarLlegada;
-    private datechooser.beans.DateChooserCombo dateChooserCombo1;
-    private datechooser.beans.DateChooserCombo dateChooserCombo2;
+    private datechooser.beans.DateChooserCombo fechallegada;
+    private datechooser.beans.DateChooserCombo fechasalida;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel8;
@@ -580,7 +824,6 @@ public class EditarVuelo extends javax.swing.JFrame {
     private javax.swing.JLabel lblDirec4;
     private javax.swing.JLabel lblDirec5;
     private javax.swing.JLabel lblError;
-    private javax.swing.JLabel lblId;
     private javax.swing.JLabel lblNick1;
     private javax.swing.JPanel pnlPrimera1;
     private javax.swing.JPanel pnlTercera;

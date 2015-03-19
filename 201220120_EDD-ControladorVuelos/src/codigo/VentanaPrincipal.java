@@ -67,7 +67,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         });
 
         btnCrearAeropuertos2.setFont(new java.awt.Font("Elected Office", 0, 18)); // NOI18N
-        btnCrearAeropuertos2.setText("Eliminar Vuelo");
+        btnCrearAeropuertos2.setText("Cambiar Estado");
         btnCrearAeropuertos2.setPreferredSize(new java.awt.Dimension(204, 29));
         btnCrearAeropuertos2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

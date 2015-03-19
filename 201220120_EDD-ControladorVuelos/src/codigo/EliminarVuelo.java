@@ -6,10 +6,14 @@
 package codigo;
 
 import datechooser.beans.DateChooserDialog;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.StringTokenizer;
 import javax.swing.ImageIcon;
+import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.WindowConstants;
 
 /**
@@ -46,11 +50,36 @@ public class EliminarVuelo extends javax.swing.JFrame {
             }
         });
         setLocationRelativeTo(null);
-        setTitle("Menu - Crear Usuario");
+        setTitle("Menu - Eliminar Vuelo");
     }
 
     public void datosVentana() {
-        lblError.setVisible(false);
+        lblError.setText("");
+        String url = "http://127.0.0.1:5000/get_vuelos";
+        String res = crearConexion.crearConexion(url, "HTTP");
+
+        StringTokenizer tokens = new StringTokenizer(res, ",");
+        while (tokens.hasMoreTokens()) {
+            String a = tokens.nextToken();
+            this.comboId.addItem(a);
+        }
+
+        comboId.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String opc = comboId.getSelectedItem().toString();
+                if (opc != "(Seleccione un Vuelo)") {
+                    String url2 = "http://127.0.0.1:5000/getEstado/" + opc;
+
+                    String cadena = crearConexion.crearConexion(url2, "HTTP");
+                    cadena = cadena.replace("-", " ");
+                    System.out.println(cadena);
+                    comboEstado.setSelectedItem(cadena);
+                } else {
+                    comboEstado.setSelectedItem("Seleccione un Estado");
+
+                }
+            }
+        });
 
     }
 
@@ -65,26 +94,41 @@ public class EliminarVuelo extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        btnCancelar = new javax.swing.JButton();
         lblNick1 = new javax.swing.JLabel();
-        combAeropuerto = new javax.swing.JComboBox();
-        jSeparator2 = new javax.swing.JSeparator();
-        lblError = new javax.swing.JLabel();
+        comboId = new javax.swing.JComboBox();
         lblDirec4 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        combAeropuerto1 = new javax.swing.JComboBox();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        txtDisponibles = new javax.swing.JLabel();
-        txtDisponibles3 = new javax.swing.JLabel();
-        btnComprobar1 = new javax.swing.JButton();
+        comboEstado = new javax.swing.JComboBox();
+        lblError = new javax.swing.JLabel();
+        btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Elected Office", 0, 22)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Bienvenido, ingrese la información necesaria");
+
+        lblNick1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblNick1.setText("Estado");
+
+        comboId.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "(Seleccione un Vuelo)" }));
+
+        lblDirec4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblDirec4.setText("Id. Vuelo:");
+
+        jButton1.setText("Cambiar Estado");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        comboEstado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "(Seleccione un Estado)", "En Aeropuerto", "En Vuelo", "En Arribo" }));
+
+        lblError.setForeground(new java.awt.Color(255, 0, 0));
+        lblError.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblError.setText("Debe selecionar un ID");
+        lblError.setPreferredSize(new java.awt.Dimension(25, 25));
 
         btnCancelar.setText("Cancelar");
         btnCancelar.setMaximumSize(new java.awt.Dimension(117, 23));
@@ -96,120 +140,36 @@ public class EliminarVuelo extends javax.swing.JFrame {
             }
         });
 
-        lblNick1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lblNick1.setText("Nombre del Aeropuerto");
-
-        combAeropuerto.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "(Seleccione un Aeropuerto)" }));
-
-        lblError.setForeground(new java.awt.Color(255, 0, 0));
-        lblError.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblError.setText("El estado actual no permite que el vuelo sea eliminado.");
-        lblError.setPreferredSize(new java.awt.Dimension(25, 25));
-
-        lblDirec4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lblDirec4.setText("Id. Vuelo:");
-
-        jButton1.setText("Comprobar Estado");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
-        combAeropuerto1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "(Seleccione un Vuelo)" }));
-
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Información sobre el vuelo"));
-
-        jLabel3.setFont(new java.awt.Font("Berlin Sans FB", 0, 14)); // NOI18N
-        jLabel3.setText("Estado:");
-
-        jLabel6.setFont(new java.awt.Font("Berlin Sans FB", 0, 14)); // NOI18N
-        jLabel6.setText("Disponibilidad de Eliminar:");
-
-        txtDisponibles.setText("En Aeropuerto");
-
-        txtDisponibles3.setForeground(new java.awt.Color(255, 0, 0));
-        txtDisponibles3.setText("DISPONIBLE");
-
-        btnComprobar1.setText("ELIMINAR REGISTRO");
-        btnComprobar1.setPreferredSize(new java.awt.Dimension(150, 20));
-        btnComprobar1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnComprobar1ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnComprobar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtDisponibles3, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtDisponibles, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(69, 69, 69))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(txtDisponibles))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(txtDisponibles3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnComprobar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(26, Short.MAX_VALUE))
-        );
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(97, 97, 97))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblNick1)
-                    .addComponent(lblDirec4))
-                .addGap(29, 29, 29)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(combAeropuerto1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(combAeropuerto, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(28, 28, 28))))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(20, 20, 20)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 471, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 466, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 431, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(45, 45, 45)))
-                .addContainerGap(25, Short.MAX_VALUE))
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 456, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblNick1)
+                                    .addComponent(lblDirec4))
+                                .addGap(56, 56, 56)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(comboId, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(comboEstado, 0, 280, Short.MAX_VALUE)))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(96, 96, 96)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(42, 42, 42)
+                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -220,27 +180,40 @@ public class EliminarVuelo extends javax.swing.JFrame {
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblNick1)
-                    .addComponent(combAeropuerto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(comboId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblDirec4))
+                .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblDirec4)
-                    .addComponent(combAeropuerto1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblNick1)
+                    .addComponent(comboEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            String id = comboId.getSelectedItem().toString();
+            String estado = comboEstado.getSelectedItem().toString();
+            estado = estado.replace(" ", "-");
+            String url = "http://127.0.0.1:5000/modificarEstado/" + id + "/" + estado;
+            String res = crearConexion.crearConexion(url, "HTTP");
+            showMessageDialog(null, "Datos modificados exitosamente");
+            menu.setVisible(true);
+            dispose();
+        } catch (Exception e) {
+            showMessageDialog(null, "¡Ha ocurrido un error!");
+        }
+
+// TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         menu.setVisible(true);
@@ -248,36 +221,19 @@ public class EliminarVuelo extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void btnComprobar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprobar1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnComprobar1ActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-   
-
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
-    private javax.swing.JButton btnComprobar1;
-    private javax.swing.JComboBox combAeropuerto;
-    private javax.swing.JComboBox combAeropuerto1;
+    private javax.swing.JComboBox comboEstado;
+    private javax.swing.JComboBox comboId;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JLabel lblDirec4;
     private javax.swing.JLabel lblError;
     private javax.swing.JLabel lblNick1;
-    private javax.swing.JLabel txtDisponibles;
-    private javax.swing.JLabel txtDisponibles3;
     // End of variables declaration//GEN-END:variables
 }

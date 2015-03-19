@@ -138,19 +138,28 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRptUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRptUsuariosActionPerformed
+        reporteUsuarios menu = new reporteUsuarios();
+        menu.setVisible(true);
+        this.setVisible(false);
        // TODO add your handling code here:
     }//GEN-LAST:event_btnRptUsuariosActionPerformed
 
     private void btnRptUsuarios1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRptUsuarios1ActionPerformed
-        // TODO add your handling code here:
+        reporteAeropuerto menu = new reporteAeropuerto();
+        menu.setVisible(true);
+        this.setVisible(false);        // TODO add your handling code here:
     }//GEN-LAST:event_btnRptUsuarios1ActionPerformed
 
     private void btnRptUsuarios2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRptUsuarios2ActionPerformed
-        // TODO add your handling code here:
+        reporteVuelo menu = new reporteVuelo();
+        menu.setVisible(true);
+        this.setVisible(false);  // TODO add your handling code here:
     }//GEN-LAST:event_btnRptUsuarios2ActionPerformed
 
     private void btnRptUsuarios3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRptUsuarios3ActionPerformed
-        // TODO add your handling code here:
+      reporteTotal menu = new reporteTotal();
+        menu.setVisible(true);
+        this.setVisible(false);  // TODO add your handling code here:
     }//GEN-LAST:event_btnRptUsuarios3ActionPerformed
 
 

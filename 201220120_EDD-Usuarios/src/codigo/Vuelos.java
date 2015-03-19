@@ -7,7 +7,9 @@ package codigo;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.StringTokenizer;
 import javax.swing.ImageIcon;
+import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.WindowConstants;
 
 /**
@@ -20,8 +22,10 @@ public class Vuelos extends javax.swing.JFrame {
      * Creates new form Vuelos
      */
     VentanaPrincipal menu;
+
     public Vuelos() {
         initComponents();
+        datosVentana();
         setIconImage(new ImageIcon(getClass().getResource("/imagenes/icon.png")).getImage());
 
         setResizable(false);
@@ -44,6 +48,30 @@ public class Vuelos extends javax.swing.JFrame {
         setTitle("Menu - Asignación de Vuelos");
     }
 
+    boolean control;
+
+    public void datosVentana() {
+        lblError.setVisible(false);
+        String url = "http://127.0.0.1:5000/get_vuelos";
+        String res = crearConexion.crearConexion(url, "HTTP");
+
+        control = false;
+        StringTokenizer tokens = new StringTokenizer(res, ",");
+        while (tokens.hasMoreTokens()) {
+            String a = tokens.nextToken();
+            this.comboId.addItem(a);
+        }
+        String url1 = "http://127.0.0.1:5000/get_usuarios";
+        String res1 = crearConexion.crearConexion(url1, "HTTP");
+
+        StringTokenizer tokens1 = new StringTokenizer(res1, ",");
+        while (tokens1.hasMoreTokens()) {
+            String a = tokens1.nextToken();
+            this.comboUser.addItem(a);
+        }
+
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -61,16 +89,23 @@ public class Vuelos extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         txtDisponibles = new javax.swing.JLabel();
-        txtDisponibles1 = new javax.swing.JLabel();
-        txtDisponibles2 = new javax.swing.JLabel();
-        txtDisponibles3 = new javax.swing.JLabel();
+        txtTotalAsientos = new javax.swing.JLabel();
+        txtSalida = new javax.swing.JLabel();
+        txtDisponibilidad = new javax.swing.JLabel();
         btnComprobar1 = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        txtDestino = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        txtEstado = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         lblselecionarvuelo = new javax.swing.JLabel();
-        boxhorario = new javax.swing.JComboBox();
+        comboId = new javax.swing.JComboBox();
         boxTipoVuelo = new javax.swing.JComboBox();
         btnComprobar = new javax.swing.JButton();
+        lblError = new javax.swing.JLabel();
+        lblselecionarvuelo1 = new javax.swing.JLabel();
+        comboUser = new javax.swing.JComboBox();
         btnComprobar2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -88,22 +123,37 @@ public class Vuelos extends javax.swing.JFrame {
         jLabel4.setText("Total de asientos:");
 
         jLabel5.setFont(new java.awt.Font("Berlin Sans FB", 0, 14)); // NOI18N
-        jLabel5.setText("Estado de vuelo:");
+        jLabel5.setText("Lugar de salida:");
 
         jLabel6.setFont(new java.awt.Font("Berlin Sans FB", 0, 14)); // NOI18N
         jLabel6.setText("Disponibilidad:");
 
         txtDisponibles.setText("00");
 
-        txtDisponibles1.setText("00");
+        txtTotalAsientos.setText("00");
 
-        txtDisponibles2.setText("Aeropuerto");
+        txtSalida.setText("---------------");
 
-        txtDisponibles3.setForeground(new java.awt.Color(255, 0, 0));
-        txtDisponibles3.setText("DISPONIBLE");
+        txtDisponibilidad.setForeground(new java.awt.Color(255, 0, 0));
+        txtDisponibilidad.setText("---------------");
 
         btnComprobar1.setText("COMPRAR BOLETO");
         btnComprobar1.setPreferredSize(new java.awt.Dimension(150, 20));
+        btnComprobar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnComprobar1ActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setFont(new java.awt.Font("Berlin Sans FB", 0, 14)); // NOI18N
+        jLabel7.setText("Destino:");
+
+        txtDestino.setText("---------------");
+
+        jLabel8.setFont(new java.awt.Font("Berlin Sans FB", 0, 14)); // NOI18N
+        jLabel8.setText("Estado:");
+
+        txtEstado.setText("---------------");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -115,13 +165,17 @@ public class Vuelos extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addComponent(jLabel4)
                     .addComponent(jLabel5)
-                    .addComponent(jLabel6))
-                .addGap(43, 43, 43)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel8))
+                .addGap(37, 37, 37)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtDestino, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnComprobar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtDisponibles3, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtDisponibles2, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtDisponibles1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtDisponibilidad, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSalida, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTotalAsientos, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtDisponibles, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -135,18 +189,25 @@ public class Vuelos extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(txtDisponibles1))
+                    .addComponent(txtTotalAsientos))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(txtDestino))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(txtDisponibles2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(txtSalida))
+                .addGap(13, 13, 13)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(txtEstado))
+                .addGap(13, 13, 13)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(txtDisponibles3))
+                    .addComponent(txtDisponibilidad))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnComprobar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(btnComprobar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Menu Aeropuerto"));
@@ -157,45 +218,77 @@ public class Vuelos extends javax.swing.JFrame {
         lblselecionarvuelo.setFont(new java.awt.Font("Berlin Sans FB", 0, 14)); // NOI18N
         lblselecionarvuelo.setText("Seleccionar Vuelo:");
 
-        boxhorario.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "(Seleccione un horario)" }));
-        boxhorario.setPreferredSize(new java.awt.Dimension(150, 20));
+        comboId.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "(Seleccione un Vuelo)" }));
+        comboId.setPreferredSize(new java.awt.Dimension(150, 20));
 
-        boxTipoVuelo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "(Seleccione un tipo)", "Ejecutivo", "Primera Clase" }));
+        boxTipoVuelo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "(Seleccione un tipo)", "Ejecutivo", "Primera Clase", "Turista" }));
         boxTipoVuelo.setPreferredSize(new java.awt.Dimension(150, 20));
 
         btnComprobar.setText("COMPROBAR DISPONIBILIDAD");
         btnComprobar.setPreferredSize(new java.awt.Dimension(150, 20));
+        btnComprobar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnComprobarActionPerformed(evt);
+            }
+        });
+
+        lblError.setForeground(new java.awt.Color(255, 0, 0));
+        lblError.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblError.setText("Por favor llene todos los campos para continuar.");
+        lblError.setPreferredSize(new java.awt.Dimension(25, 25));
+
+        lblselecionarvuelo1.setFont(new java.awt.Font("Berlin Sans FB", 0, 14)); // NOI18N
+        lblselecionarvuelo1.setText("Usuario");
+
+        comboUser.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "(Seleccione un Usuario)" }));
+        comboUser.setPreferredSize(new java.awt.Dimension(150, 20));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(lblselecionarvuelo1))
+                        .addGap(27, 27, 27)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(comboId, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(comboUser, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(boxTipoVuelo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnComprobar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(15, 15, 15)))
+                .addContainerGap())
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(lblselecionarvuelo))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnComprobar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(boxTipoVuelo, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(boxhorario, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(lblselecionarvuelo)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(12, 12, 12)
+                .addGap(20, 20, 20)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblselecionarvuelo1)
+                    .addComponent(comboUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblselecionarvuelo)
+                    .addComponent(comboId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(boxTipoVuelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblselecionarvuelo)
-                    .addComponent(boxhorario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(28, 28, 28)
-                .addComponent(btnComprobar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnComprobar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         btnComprobar2.setText("REGRESAR A MENU PRINCIPAL");
@@ -214,17 +307,22 @@ public class Vuelos extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lbltitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lbltitulo, javax.swing.GroupLayout.DEFAULT_SIZE, 463, Short.MAX_VALUE)
                         .addGap(1, 1, 1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnComprobar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jSeparator1)
-                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addContainerGap(21, Short.MAX_VALUE))))
+                        .addGap(208, 208, 208)
+                        .addComponent(btnComprobar2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(73, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jSeparator1)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -233,48 +331,147 @@ public class Vuelos extends javax.swing.JFrame {
                 .addComponent(lbltitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnComprobar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnComprobar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprobar2ActionPerformed
- setVisible(false);
+        setVisible(false);
         dispose();
         menu.setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_btnComprobar2ActionPerformed
 
+    private void btnComprobarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprobarActionPerformed
+        lblError.setVisible(true);
+        lblError.setText("");
+        String boxId, boxTipoVuelo, comboUser;
+        boxId = this.comboId.getSelectedItem().toString();
+        boxTipoVuelo = this.boxTipoVuelo.getSelectedItem().toString();
+        comboUser = this.comboUser.getSelectedItem().toString();
+        boxTipoVuelo = boxTipoVuelo.replace(" ", "-");
+        if (comboUser.equals("(Seleccione un Usuario)")) {
+            lblError.setText("Debe seleccionar un Usuario valido.");
+        } else {
+            if (boxId.equals("(Seleccione un Vuelo)") || boxTipoVuelo.equals("(Seleccione-un-tipo)")) {
+                lblError.setText("Por favor llene todos los datos necesarios.");
+            } else {
+                try {
+
+                    String url = "http://127.0.0.1:5000/get_datos_clase_vuelo/" + boxId + "/" + boxTipoVuelo;
+                    String res = crearConexion.crearConexion(url, "HTTP");
+
+                    StringTokenizer tokens = new StringTokenizer(res, ",");
+                    int totalAsientos = Integer.parseInt(tokens.nextToken());
+                    txtTotalAsientos.setText(String.valueOf(totalAsientos));
+                    int asientosDisponibles = Integer.parseInt(tokens.nextToken());
+
+                    int aux = (totalAsientos - asientosDisponibles);
+                    txtDisponibles.setText(String.valueOf(aux));
+                    txtDestino.setText(tokens.nextToken());
+                    txtSalida.setText(tokens.nextToken());
+                    String estado = tokens.nextToken();
+                    estado = estado.replace("-", " ");
+                    System.out.println(estado);
+                    txtEstado.setText(estado);
+                    if (aux < 1 || estado.equals("En Vuelo") || estado.equals("En Arribo")) {
+                        txtDisponibilidad.setText("VUELO NO DISPONIBLE");
+                        control = false;
+                    } else {
+                        txtDisponibilidad.setText("VUELO DISPONIBLE");
+                        control = true;
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_btnComprobarActionPerformed
+
+    private void btnComprobar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprobar1ActionPerformed
+        if (control) {
+            String id = comboId.getSelectedItem().toString();
+            String categoria = "";
+            switch (boxTipoVuelo.getSelectedIndex()) {
+                case 1:
+                    categoria = "Ejecutivo";
+                    break;
+                case 2:
+                    categoria = "Primera-Clase";
+                    break;
+                case 3:
+                    categoria = "Turista";
+                    break;
+
+            }
+            int cantidad = Integer.parseInt(txtDisponibles.getText());
+            String disponibilidad = txtDisponibilidad.getText();
+            if (disponibilidad.equals("VUELO NO DISPONIBLE")) {
+                lblError.setText("El vuelo elegido no está disponible");
+
+            } else {
+
+                //asignar_vuelo
+                String nombre = comboUser.getSelectedItem().toString();
+                String url2 = "http://127.0.0.1:5000/asignar_vuelo/" + nombre + "/" + id;
+                String res2 = crearConexion.crearConexion(url2, "HTTP");
+                String url3 = "http://127.0.0.1:5000/restar_cantidad/" + id + "/" + categoria;
+                String res3 = crearConexion.crearConexion(url3, "HTTP");
+                String direccion = txtDestino.getText();
+                String url5 = "http://127.0.0.1:5000/get_direccionAeropuerto/" + direccion;
+                String res5 = crearConexion.crearConexion(url5, "HTTP");
+                System.out.println(res5);
+                System.out.println(nombre);
+
+                String url4 = "http://127.0.0.1:5000/set_direccion_actual/" + nombre + "/" + res5;
+                String res4 = crearConexion.crearConexion(url4, "HTTP");
+                showMessageDialog(null, "Vuelo agregado exitosamente");
+                menu.setVisible(true);
+                dispose();
+
+            }
+        }// TODO add your handling code here:
+    }//GEN-LAST:event_btnComprobar1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox boxTipoVuelo;
-    private javax.swing.JComboBox boxhorario;
     private javax.swing.JButton btnComprobar;
     private javax.swing.JButton btnComprobar1;
     private javax.swing.JButton btnComprobar2;
+    private javax.swing.JComboBox comboId;
+    private javax.swing.JComboBox comboUser;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel lblError;
     private javax.swing.JLabel lblselecionarvuelo;
+    private javax.swing.JLabel lblselecionarvuelo1;
     private javax.swing.JLabel lbltitulo;
+    private javax.swing.JLabel txtDestino;
+    private javax.swing.JLabel txtDisponibilidad;
     private javax.swing.JLabel txtDisponibles;
-    private javax.swing.JLabel txtDisponibles1;
-    private javax.swing.JLabel txtDisponibles2;
-    private javax.swing.JLabel txtDisponibles3;
+    private javax.swing.JLabel txtEstado;
+    private javax.swing.JLabel txtSalida;
+    private javax.swing.JLabel txtTotalAsientos;
     // End of variables declaration//GEN-END:variables
 }

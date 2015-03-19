@@ -7,7 +7,11 @@ package codigo;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.ImageIcon;
+import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.WindowConstants;
 
 /**
@@ -20,6 +24,7 @@ public class DarDeBaja extends javax.swing.JFrame {
      * Creates new form Vuelos
      */
     VentanaPrincipal menu;
+
     public DarDeBaja() {
         initComponents();
         setIconImage(new ImageIcon(getClass().getResource("/imagenes/icon.png")).getImage());
@@ -42,6 +47,8 @@ public class DarDeBaja extends javax.swing.JFrame {
         });
         setLocationRelativeTo(null);
         setTitle("Menu - Dar de Baja");
+        btnDarBaja.setEnabled(false);
+        lblError.setVisible(false);
     }
 
     /**
@@ -64,7 +71,8 @@ public class DarDeBaja extends javax.swing.JFrame {
         lblselecionarvuelo = new javax.swing.JLabel();
         btnComprobar = new javax.swing.JButton();
         txtUsuario = new javax.swing.JTextField();
-        txtContraseña = new javax.swing.JTextField();
+        txtContraseña = new javax.swing.JPasswordField();
+        lblError = new javax.swing.JLabel();
         btnDarBaja1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -79,10 +87,15 @@ public class DarDeBaja extends javax.swing.JFrame {
         jLabel6.setText("Disponibilidad:");
 
         txtDisponibles.setForeground(new java.awt.Color(255, 0, 0));
-        txtDisponibles.setText("DISPONIBLE");
+        txtDisponibles.setText("--------------------");
 
-        btnDarBaja.setText("COMPRAR BOLETO");
+        btnDarBaja.setText("ELIMINAR USUARIO");
         btnDarBaja.setPreferredSize(new java.awt.Dimension(150, 20));
+        btnDarBaja.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDarBajaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -95,7 +108,7 @@ public class DarDeBaja extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnDarBaja, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtDisponibles, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -117,24 +130,38 @@ public class DarDeBaja extends javax.swing.JFrame {
         lblselecionarvuelo.setFont(new java.awt.Font("Berlin Sans FB", 0, 14)); // NOI18N
         lblselecionarvuelo.setText("Contraseña");
 
-        btnComprobar.setText("COMPROBAR USUARIO");
+        btnComprobar.setText("BUSCAR USUARIO");
         btnComprobar.setPreferredSize(new java.awt.Dimension(150, 20));
+        btnComprobar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnComprobarActionPerformed(evt);
+            }
+        });
+
+        lblError.setForeground(new java.awt.Color(255, 0, 0));
+        lblError.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblError.setText("Por favor llene todos los campos para continuar.");
+        lblError.setPreferredSize(new java.awt.Dimension(25, 25));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(81, 81, 81)
+                .addComponent(btnComprobar, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(lblselecionarvuelo))
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnComprobar, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(lblError, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(lblselecionarvuelo))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
@@ -152,9 +179,10 @@ public class DarDeBaja extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblselecionarvuelo)
                     .addComponent(txtContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(28, 28, 28)
-                .addComponent(btnComprobar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23))
+                .addGap(11, 11, 11)
+                .addComponent(lblError, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(17, 17, 17)
+                .addComponent(btnComprobar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         btnDarBaja1.setText("REGRESAR A MENU PRINCIPAL");
@@ -173,7 +201,7 @@ public class DarDeBaja extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lbltitulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lbltitulo, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
                         .addGap(1, 1, 1))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
@@ -183,7 +211,7 @@ public class DarDeBaja extends javax.swing.JFrame {
                                 .addComponent(jSeparator1)
                                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addContainerGap(21, Short.MAX_VALUE))))
+                        .addContainerGap(13, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -205,15 +233,74 @@ public class DarDeBaja extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDarBaja1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDarBaja1ActionPerformed
- setVisible(false);
+        setVisible(false);
         dispose();
         menu.setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_btnDarBaja1ActionPerformed
 
+    private void btnComprobarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprobarActionPerformed
+        String url1 = "http://127.0.0.1:5000/get_usuarios";
+        String res1 = crearConexion.crearConexion(url1, "HTTP");
+
+        StringTokenizer tokens1 = new StringTokenizer(res1, ",");
+        while (tokens1.hasMoreTokens()) {
+            String a = tokens1.nextToken();
+            System.out.println(a);
+        }
+        lblError.setText("");
+        lblError.setVisible(true);
+        txtDisponibles.setText("--------------------");
+        try {
+            if (txtUsuario.getText().equals("") || txtContraseña.getText().equals("")) {
+
+                lblError.setText("Por favor llene las casillas necesarias para continuar.");
+            } else {
+                String cadena = txtUsuario.getText();
+                String pass = txtContraseña.getText();
+
+                String url = "http://127.0.0.1:5000/validarUsuario/" + cadena + "/" + pass;
+                String res = crearConexion.crearConexion(url, "HTTP");
+                if (res.equals("False")) {
+
+                    lblError.setText("Ingrese un nombre y contraseña veridico.");
+
+                } else {
+                    lblError.setText("Usuario encontrado");
+                    btnDarBaja.setEnabled(true);
+                    txtDisponibles.setText("DISPONIBLE");
+
+                }
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+// TODO add your handling code here:
+    }//GEN-LAST:event_btnComprobarActionPerformed
+
+    private void btnDarBajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDarBajaActionPerformed
+        try {
+
+            String user = txtUsuario.getText();
+            String url = "http://127.0.0.1:5000/eliminar_usuario/" + user;
+            String res = crearConexion.crearConexion(url, "HTTP");
+            //int index = this.jComboBox5.getSelectedIndex();
+            // this.jComboBox5.removeItemAt(index);
+            showMessageDialog(null, res);
+            menu.setVisible(true);
+            dispose();
+        } catch (Exception e) {
+            
+            lblError.setText("Ocuriió un error");
+            e.printStackTrace();
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_btnDarBajaActionPerformed
+
     /**
      * @param args the command line arguments
      */
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnComprobar;
@@ -224,6 +311,7 @@ public class DarDeBaja extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel lblError;
     private javax.swing.JLabel lblselecionarvuelo;
     private javax.swing.JLabel lbltitulo;
     private javax.swing.JTextField txtContraseña;
